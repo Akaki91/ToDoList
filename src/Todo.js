@@ -10,7 +10,6 @@ class Todo extends React.Component  {
         value: ''
     }
 
-
     onValueChange = (event) => {
         this.setState({
             value: event.target.value
@@ -18,7 +17,7 @@ class Todo extends React.Component  {
     }
 
     onKeyDown = (event) => {
-        if (event.which === 13) {
+        if (event.which === 13 && this.state.value.length > 0) {
             let text = this.state.value
 
             this.setState({
@@ -40,11 +39,38 @@ class Todo extends React.Component  {
         
     }
 
-    // completeItem = (index) => {
-    //     this.state.list[index].completed
+    completeItem = (index) => {
+        let newItems = Array.from(this.state.list)
+        
+        this.state.list[index].completed === false ? 
+            newItems[index].completed = true : newItems[index].completed = false 
 
+        this.setState({
+            list: newItems
+        })
+    }
+
+ 
+    // filter = (arg) => {
+    //     let orginalState = Array.from(this.state.list)
+    //     let newItems = []
+
+    //     if (arg === "active" ){
+    //         newItems = orginalState.filter(items => items.completed === false)
+    //     } 
+    //     else if (arg === "completed"){
+    //         newItems = orginalState.filter(items => items.completed === true)
+    //     }
+    //     else {
+    //         newItems = orginalState
+    //     }
+
+    //     this.setState({
+    //         list: newItems
+    //     })        
 
     // }
+    
 
 
     render() {
@@ -52,6 +78,8 @@ class Todo extends React.Component  {
             <div>
                 <input 
                 type="text" 
+                className="textarea"
+                placeholder="Write things to do"
                 value={this.state.value} 
                 onChange={this.onValueChange}
                 onKeyDown={this.onKeyDown}
@@ -62,8 +90,9 @@ class Todo extends React.Component  {
                         return (
                             <li key={i}>
                                 <input onClick={() => { this.completeItem(i) }} type="checkbox" />
-                                <span>{item.text}</span>
-                                <button oonClick={() => { this.deleteItem(i) }}>x</button>
+                                <span className={this.state.list[i].completed ? "completed" : ""}
+                                >{item.text}</span>
+                                <button onClick={() => { this.deleteItem(i) }}>x</button>
                             </li>
                         )     
                     })}
