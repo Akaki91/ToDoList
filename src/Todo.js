@@ -7,7 +7,8 @@ class Todo extends React.Component  {
         list: [
         ],
 
-        value: ''
+        value: '',
+        selected: "all"
     }
 
     onValueChange = (event) => {
@@ -40,40 +41,49 @@ class Todo extends React.Component  {
     }
 
     completeItem = (index) => {
-        let newItems = Array.from(this.state.list)
-        
-        this.state.list[index].completed === false ? 
-            newItems[index].completed = true : newItems[index].completed = false 
+        let newItems = this.state.list.map((item, i) => {
+            if (i === index) {
+                item.completed = !item.completed
+            }
+            return item
+        })
 
         this.setState({
             list: newItems
         })
     }
 
- 
-    // filter = (arg) => {
-    //     let orginalState = Array.from(this.state.list)
-    //     let newItems = []
-
-    //     if (arg === "active" ){
-    //         newItems = orginalState.filter(items => items.completed === false)
-    //     } 
-    //     else if (arg === "completed"){
-    //         newItems = orginalState.filter(items => items.completed === true)
-    //     }
-    //     else {
-    //         newItems = orginalState
-    //     }
-
-    //     this.setState({
-    //         list: newItems
-    //     })        
-
-    // }
+    filter = (arg) => {
+        this.setState({
+            selected: arg
+        })
+    }
     
+    clearCompleted = () => {
+        let newItems = this.state.list.filter(item => !item.completed)
+
+        this.setState({
+            list: newItems
+        })
+    }
 
 
     render() {
+
+        let items = this.state.list.filter(item => {
+            if (this.state.selected === 'all') {
+                return true
+            }
+            else if (this.state.selected === 'active') {
+                return !item.completed
+            }
+            else {
+                return item.completed
+            }
+        })
+
+        let itemleft = this.state.list.filter(item => !item.completed).length
+
         return (
             <div>
                 <input 
@@ -86,21 +96,30 @@ class Todo extends React.Component  {
                 />
                 <ul>
                     {
-                    this.state.list.map((item, i) => {
+                    items.map((item, i) => {
                         return (
-                            <li key={i}>
-                                <input onClick={() => { this.completeItem(i) }} type="checkbox" />
-                                <span className={this.state.list[i].completed ? "completed" : ""}
-                                >{item.text}</span>
+                            <li key={i} className={item.completed ? "completed" : ""}>
+                                <input 
+                                    onChange={() => { this.completeItem(i) }} 
+                                    type="checkbox"
+                                    checked={item.completed}
+                                    />
+                                <span>{item.text}</span>
                                 <button onClick={() => { this.deleteItem(i) }}>x</button>
                             </li>
                         )     
                     })}
                 </ul>
                 <div>
-                    <button>All</button>
-                    <button>Active</button>
-                    <button>Completed</button>
+                    {`${itemleft} item left`}
+                    <button onClick={() => { this.filter("all") }}>All</button>
+                    <button onClick={() => { this.filter("active") }}>Active</button>
+                    <button onClick={() => { this.filter("completed") }}>Completed</button>
+                    
+                    {
+                        (itemleft < this.state.list.length) ? <p><button onClick={this.clearCompleted}>Clear Completed</button></p> : null
+                    }
+                    
                 </div>
             </div>
 
