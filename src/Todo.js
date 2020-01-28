@@ -1,4 +1,5 @@
 import React from 'react'
+import Todoitem from './Todoitem'
 
 
 class Todo extends React.Component  {
@@ -98,15 +99,13 @@ class Todo extends React.Component  {
                     {
                     items.map((item, i) => {
                         return (
-                            <li key={i} className={item.completed ? "completed" : ""}>
-                                <input 
-                                    onChange={() => { this.completeItem(i) }} 
-                                    type="checkbox"
-                                    checked={item.completed}
-                                    />
-                                <span>{item.text}</span>
-                                <button onClick={() => { this.deleteItem(i) }}>x</button>
-                            </li>
+                            <Todoitem
+                                key={i}
+                                id={i}
+                                item={item}
+                                completeItem={this.completeItem}
+                                deleteItem={this.deleteItem}
+                            />
                         )     
                     })}
                 </ul>
