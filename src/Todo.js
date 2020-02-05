@@ -1,6 +1,23 @@
 import React from 'react'
 import Todoitem from './Todoitem'
 
+// import * as firebase from "firebase/app"
+// import "firebase/firestore"
+
+// const firebaseConfig = {
+//     apiKey: "AIzaSyBwVm5DyUWzQ2fZRKnZZwQs0fH953tF18Q",
+//     authDomain: "todolist-aac44.firebaseapp.com",
+//     databaseURL: "https://todolist-aac44.firebaseio.com",
+//     projectId: "todolist-aac44",
+//     storageBucket: "todolist-aac44.appspot.com",
+//     messagingSenderId: "544391089116",
+//     appId: "1:544391089116:web:be8b2ccb26b32f92195d19"
+// };
+
+// firebase.initializeApp(firebaseConfig);
+
+// var db = firebase.firestore()
+
 
 class Todo extends React.Component  {
 
@@ -12,70 +29,105 @@ class Todo extends React.Component  {
         selected: "all"
     }
 
+
     onValueChange = (event) => {
         this.setState({
             value: event.target.value
         })
     }
 
+    addItem = (text) => {
+        let state = JSON.parse(localStorage.getItem('state'))
+
+        state.list = [...state.list,
+            {
+            text: text,
+            completed: false
+            }]
+    
+        localStorage.setItem('state', JSON.stringify(state))
+
+        this.setState(state)
+    }
+
     onKeyDown = (event) => {
         if (event.which === 13 && this.state.value.length > 0) {
             let text = this.state.value
-
-            this.setState({
-                list: [...this.state.list, {
-                    text: text,
-                    completed: false
-                }],
-                value: ''
-            })
+            this.addItem(text)
         }
     }
 
     deleteItem = (index) => {
-        this.state.list.splice(index, 1)
+        let state = JSON.parse(localStorage.getItem('state'))
+        state.list.splice(index, 1)
+
+        localStorage.setItem('state', JSON.stringify(state))
 
         this.setState({
-            list: this.state.list
+            list: state.list
         })
         
     }
 
     completeItem = (index) => {
-        let newItems = this.state.list.map((item, i) => {
+        let state = JSON.parse(localStorage.getItem('state'))
+
+        state.list = state.list.map((item, i) => {
             if (i === index) {
                 item.completed = !item.completed
             }
             return item
         })
 
+        localStorage.setItem('state', JSON.stringify(state))
+
         this.setState({
-            list: newItems
+            list: state.list
         })
     }
 
     filter = (arg) => {
+        let state = JSON.parse(localStorage.getItem('state'))
+
+        state.selected = arg
+
+        localStorage.setItem('state', JSON.stringify(state))
         this.setState({
             selected: arg
         })
     }
     
     clearCompleted = () => {
-        let newItems = this.state.list.filter(item => !item.completed)
+        let state = JSON.parse(localStorage.getItem('state'))
 
+        state.list = state.list.filter(item => !item.completed)
+
+        localStorage.setItem('state', JSON.stringify(state))
         this.setState({
-            list: newItems
+            list: state.list
         })
     }
 
 
     render() {
+        let state = JSON.parse(localStorage.getItem('state'))
 
-        let items = this.state.list.filter(item => {
-            if (this.state.selected === 'all') {
+        if (state === null) {
+            localStorage.setItem('state', JSON.stringify({
+                list: [
+                ],
+
+                value: '',
+                selected: "all"
+            }))
+        }
+        state = JSON.parse(localStorage.getItem('state'))
+
+        let items = state.list.filter(item => {
+            if (state.selected === 'all') {
                 return true
             }
-            else if (this.state.selected === 'active') {
+            else if (state.selected === 'active') {
                 return !item.completed
             }
             else {
@@ -83,7 +135,7 @@ class Todo extends React.Component  {
             }
         })
 
-        let itemleft = this.state.list.filter(item => !item.completed).length
+        let itemleft = state.list.filter(item => !item.completed).length
 
         return (
             <div>
@@ -95,7 +147,7 @@ class Todo extends React.Component  {
                 onChange={this.onValueChange}
                 onKeyDown={this.onKeyDown}
                 />
-                <ul>
+                <ul className="ultag">
                     {
                     items.map((item, i) => {
                         return (
@@ -111,12 +163,12 @@ class Todo extends React.Component  {
                 </ul>
                 <div>
                     {`${itemleft} item left`}
-                    <button onClick={() => { this.filter("all") }}>All</button>
-                    <button onClick={() => { this.filter("active") }}>Active</button>
-                    <button onClick={() => { this.filter("completed") }}>Completed</button>
+                    <button className="btn" onClick={() => { this.filter("all") }}>All</button>
+                    <button className="btn" onClick={() => { this.filter("active") }}>Active</button>
+                    <button className="btn" onClick={() => { this.filter("completed") }}>Completed</button>
                     
                     {
-                        (itemleft < this.state.list.length) ? <p><button onClick={this.clearCompleted}>Clear Completed</button></p> : null
+                        (itemleft < this.state.list.length) ? <p><button className="btn" onClick={this.clearCompleted}>Clear Completed</button></p> : null
                     }
                     
                 </div>

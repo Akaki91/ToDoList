@@ -1,5 +1,6 @@
 * {
-  font-size: 20px;
+  font-size: 25px;
+  font-family: 'Kalam', cursive;
 }
 
 
@@ -13,10 +14,16 @@
 }
 
 .textarea {
-  margin-top: 300px;
-  width: 300px;
-  height: 30px;
+  margin-top: 25%;
+  width: 310px;
+  height: 40px;
+  font-size: 28px;
+  border-radius: 10px;
+}
 
+.textarea:focus {
+  background-color: lightgoldenrodyellow;
+  outline: none;
 }
 
 li {
@@ -30,6 +37,55 @@ ul {
 }
 
 ul li.completed {
-    text-decoration: line-through;
-    opacity: 0.5;
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.route li {
+  float: left;
+  text-align: center;
+  padding: 15px;
+  width: 140px;
+}
+
+.router {
+  display: block;
+  color: black;
+  text-decoration: none;
+  background-color: lightgoldenrodyellow;
+  padding: 15px;
+  border-radius: 5px;
+  font-size: 15px;
+}
+
+.router:hover {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+
+.btn {
+  border-radius: 5px;
+  font-size: 15px;
+  margin-left: 10px;
+}
+
+.btn:hover {
+  background-color: lightgoldenrodyellow;
+  font-weight: bold;
+}
+
+.x {
+  padding: 10px
+}
+
+.checkbox {
+  height: 25px;
+  width: 25px;
+  cursor: pointer;
+}
+
+
+.ultag li {
+  border-bottom: solid white 1px;
 }

@@ -14,29 +14,27 @@ function App() {
 
   return (
     <Router>
-      <div className="App">
-        <div className="App-header">
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/items">Todo</Link>
-              </li>
-            </ul>
-          </nav>
+      <div className="App-header">
+        <nav>
+          <ul className="route">
+            <li>
+              <Link className="router" to="/">To Do List Page</Link>
+            </li>
+            <li>
+              <Link className="router" to="/home">Other Page</Link>
+            </li>
+          </ul>
+        </nav>
 
-          <Switch>
-            <Route path="/items">
-              <Todo />
-            </Route>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
+        <Switch>
+          <Route path="/home">
+            <Home />
+          </Route>
+          <Route path="/">
+            <Todo />
+          </Route>
+        </Switch>
           
-        </div>
       </div>
     </Router>
   );

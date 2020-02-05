@@ -8,13 +8,15 @@ function Todoitem(props) {
     return (
         <li className={item.completed ? "completed" : ""}>
             <input
+                className='checkbox'
                 onChange={() => { props.completeItem(i) }}
                 type="checkbox"
                 checked={item.completed}
             />
             <span>{item.text}</span>
-            <button onClick={() => { props.deleteItem(i) }}>x</button>
+            <span className='x'><i className="fas fa-times" onClick={() => { props.deleteItem(i) }}></i></span>
         </li>
+        
     )
 }
 
